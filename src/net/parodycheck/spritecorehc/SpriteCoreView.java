@@ -18,10 +18,12 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
     private long _clock;
     private long _oldclock;
     private long _clockaccum;
+    private android.graphics.Point _viewportSize;
     private Bitmap _background;
     private DrawThread _drawthread;
     private SpriteCoreEventAgent _eagent;
     private ArrayList<Sprite> _sprites;
+    private java.util.Random _random;
     private void init()
     {
 	_clock = System.currentTimeMillis();
@@ -32,6 +34,8 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
 	_p = new Paint();
 	_sprites = new ArrayList<Sprite>();
 	_eagent = DefaultEventAgent.instance();
+	_random = new java.util.Random();
+	_viewportSize = null;
     }
     public SpriteCoreView(Context ctx,AttributeSet attrs)
     {
@@ -75,6 +79,22 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
     {
 	return _p;
     }
+
+    public android.graphics.Point getViewportSize()
+    {
+	return _viewportSize;
+    }
+
+    public void setViewportSize(android.graphics.Point pt)
+    {
+	_viewportSize = pt;
+    }
+
+    public void setViewportSize(int x,int y)
+    {
+	_viewportSize = new android.graphics.Point(x,y);
+    }
+
     
     public void add(Sprite s)
     {
@@ -111,7 +131,7 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
 	synchronized(this) {
 	    _eagent.handleEvent(e);
 	}
-	return super.onKeyDown(code,e);
+	return true;
     }
 
     public boolean onKeyUp(int code,KeyEvent e)
@@ -119,7 +139,7 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
 	synchronized(this) {
 	    _eagent.handleEvent(e);
 	}
-	return super.onKeyUp(code,e);
+	return true;
     }
 
     public boolean onTrackballEvent(MotionEvent e)
@@ -127,7 +147,7 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
 	synchronized(this) {
 	    _eagent.handleEvent(e);
 	}
-	return super.onTrackballEvent(e);
+	return true;
     }
 
     public boolean onTouchEvent(MotionEvent e)
@@ -136,7 +156,16 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
 	synchronized(this) {
 	    _eagent.handleEvent(e);
 	}
-	return super.onTouchEvent(e);
+	return true;
+    }
+
+    protected void onMeasure(int widthSpec,int heightSpec) {
+	if(_viewportSize == null) {
+	    super.onMeasure(widthSpec,heightSpec);
+	}
+	else {
+	    setMeasuredDimension(_viewportSize.x,_viewportSize.y);
+	}
     }
 
     public DrawThread drawThread()
@@ -147,5 +176,10 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
     public SpriteCoreEventAgent eventAgent() { return _eagent;}
 
     public void setEventAgent(SpriteCoreEventAgent ea) {_eagent = ea;}
+
+    public java.util.Random randomSource()
+    {
+	return _random;
+    }
 
 }
