@@ -19,8 +19,8 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
     private long _oldclock;
     private long _clockaccum;
     private android.graphics.Point _viewportSize;
+    private DrawThread.DrawTaskCallback _cb;
     private Bitmap _background;
-    private DrawThread _drawthread;
     private SpriteCoreEventAgent _eagent;
     private ArrayList<Sprite> _sprites;
     private java.util.Random _random;
@@ -29,8 +29,7 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
 	_clock = System.currentTimeMillis();
 	_oldclock = _clock;
 	_clockaccum = 0;
-	_drawthread = DrawThread.attachThread(this,
-					      this);
+	_cb = DrawThread.attachCallback(this,this);
 	_p = new Paint();
 	_sprites = new ArrayList<Sprite>();
 	_eagent = DefaultEventAgent.instance();
@@ -170,7 +169,23 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
 
     public DrawThread drawThread()
     {
-	return _drawthread;
+	return _cb.thread();
+    }
+
+    public void pauseDrawing()
+    {
+	DrawThread dt = drawThread();
+	if(dt != null)  {
+	    dt.pauseDrawing();
+	}
+    }
+
+    public void resumeDrawing()
+    {
+	DrawThread dt = drawThread();
+	if(dt != null)  {
+	    dt.resumeDrawing();
+	}
     }
 
     public SpriteCoreEventAgent eventAgent() { return _eagent;}
