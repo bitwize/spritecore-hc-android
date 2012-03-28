@@ -38,7 +38,7 @@ class DrawThread extends Thread
 				    }
 				    catch(Exception e)
 					{
-					    Log.e("DrawTask",e.getMessage());
+					    Log.e("DrawThread",e.getMessage());
 					}
 				    finally {
 					if(c != null)

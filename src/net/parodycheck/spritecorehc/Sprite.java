@@ -163,4 +163,33 @@ public class Sprite
     {
 	return _bAgent;
     }
+    
+    public boolean isTouching(Sprite anotherSprite) {
+	float left1,top1,right1,bottom1;
+	float left2,top2,right2,bottom2;
+	boolean step1,step2;
+	left1 = pos().x - hotspot().x;
+	top1 = pos().y - hotspot().y;
+	right1 = left1 + shape().getWidth();
+	bottom1 = top1 + shape().getHeight();
+	left2 = anotherSprite.pos().x - anotherSprite.hotspot().x;
+	top2 = anotherSprite.pos().y - anotherSprite.hotspot().y;
+	right2 = left2 + anotherSprite.shape().getWidth();
+	bottom2 = top2 + anotherSprite.shape().getHeight();
+	if(left1 <= left2) {
+		if(left2 < right1) step1 = true; else step1 = false;
+	}
+	else {
+		if(right2 > left1) step1 = true; else step1 = false;
+	}
+	if(top1 <= top2) {
+		if(top2 < bottom1) step2 = true; else step2 = false;
+	}
+	else {
+		if(bottom2 > top1) step2 = true; else step2 = false;
+	}
+	return step1 && step2;
+	
+    }
+
 }

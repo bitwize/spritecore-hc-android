@@ -13,6 +13,7 @@ public class DefaultAppearanceAgent implements SpriteAppearanceAgent
     {
 	Bitmap shape = aSprite.shape();
 	PointF pos = aSprite.pos();
+	PointF hs = aSprite.hotspot();
 	SpriteCoreView v = aSprite.host();
 	android.graphics.Paint p = v.paint();
 	if(shape == null)
@@ -24,7 +25,7 @@ public class DefaultAppearanceAgent implements SpriteAppearanceAgent
 		Log.e("DefaultAppearanceAgent","canvas is null");
 	    }
 	try {
-	    aCanvas.drawBitmap(shape,pos.x,pos.y,null);
+	    aCanvas.drawBitmap(shape,pos.x - hs.x,pos.y - hs.y,null);
 	}
 	catch(Exception e)
 	    {
