@@ -1,11 +1,13 @@
 package net.parodycheck.spritecorehc;
 import android.view.SurfaceView;
 import android.content.Context;
+import android.content.res.*;
 import android.util.AttributeSet;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import java.util.*;
 import java.lang.Thread;
 import android.view.KeyEvent;
@@ -21,6 +23,7 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
     private android.graphics.Point _viewportSize;
     private DrawThread.DrawTaskCallback _cb;
     private Bitmap _background;
+    private Context _myctx;
     private SpriteCoreEventAgent _eagent;
     private ArrayList<Sprite> _sprites;
     private java.util.Random _random;
@@ -39,11 +42,13 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
     public SpriteCoreView(Context ctx,AttributeSet attrs)
     {
 	super(ctx,attrs);
+	_myctx = ctx;
 	init();
     }
     public SpriteCoreView(Context ctx)
     {
 	super(ctx);
+	_myctx = ctx;
 	init();
     }
     public void drawOn(Canvas c)
@@ -81,7 +86,12 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
 
     public android.graphics.Point getViewportSize()
     {
-	return _viewportSize;
+	if(_viewportSize != null) {
+	    return _viewportSize;
+	}
+	else {
+	    return new android.graphics.Point(getWidth(),getHeight());
+	}
     }
 
     public void setViewportSize(android.graphics.Point pt)
@@ -104,6 +114,12 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
     {
 	_sprites.remove(s);
     }
+
+    public void clear()
+    {
+	_sprites.clear();
+    }
+
     public void placeBehind(Sprite s1,Sprite s2)
     {
 	int i = _sprites.indexOf(s2);
@@ -186,6 +202,11 @@ public class SpriteCoreView extends SurfaceView implements DrawAgent
 	if(dt != null)  {
 	    dt.resumeDrawing();
 	}
+    }
+
+    public Bitmap loadBitmap(int r)
+    {
+	return BitmapFactory.decodeResource(_myctx.getResources(),r);
     }
 
     public SpriteCoreEventAgent eventAgent() { return _eagent;}
