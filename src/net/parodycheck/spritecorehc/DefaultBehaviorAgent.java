@@ -5,6 +5,8 @@ public class DefaultBehaviorAgent implements SpriteBehaviorAgent
     private static DefaultBehaviorAgent _inst;
     public void act(Sprite aSprite)
     {
+	aSprite.moveTo(aSprite.pos().x + aSprite.vel().x,
+		       aSprite.pos().y + aSprite.vel().y);
 
     }
 

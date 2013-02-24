@@ -137,8 +137,6 @@ public class Sprite
     public void step()
     {
 	_bAgent.act(this);
-	_pos.x += _vel.x;
-	_pos.y += _vel.y;
     }
     public void renderOn(android.graphics.Canvas c)
     {
